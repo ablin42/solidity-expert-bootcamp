@@ -34,6 +34,10 @@ Nonce is simply an increment corresponding to the number of tx of the account (s
 
 ////////////////////////////////////////////////////////
 . What checks are made on transactions for view functions ?
+opcode STATICCALL is used when view functions are called with EVM target >= Byzantium
+opcode DELEGATECALL is used for library, because there is no combined DELEGATECALL and STATICCALL.
+This means library view functions do not have run-time checks that prevent state modifications
+
 The function visibility is checked
 If the function is called from a state-changing transaction,
 it will be executed by every verifying node (and thus costing gas if wrapped)
