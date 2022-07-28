@@ -1,0 +1,28 @@
+////////////////////////////////////////////////////////
+How can the use of tx.origin in a contract be exploited ?
+
+If contract A calls B, and B calls C, in C msg.sender is B and tx.origin is A
+https://solidity-by-example.org/hacks/phishing-with-tx-origin/
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+What do you understand by event spoofing ?
+
+Either a way to spoof events occuring (by ommitting them ?) or 
+maybe writing malicious natspec/radspec to trick the user
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+What problems can you find in this contract designed to produce a random number.
+https://gist.github.com/extropyCoder/a627d36d7ab5b1923db8145517051199
+
+-block.timestamp is unsafe and can be manipulated
+-caller should probably not be able to input the Max value
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+What problems are there in this contract
+https://gist.github.com/extropyCoder/3a8a7f7a206041e38ee832cfa4abbd8e
+
+Iterating the array can be used to create a DOS attack by spamming the joinCourse() function
+////////////////////////////////////////////////////////
