@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////
+Do you know what this code is doing ?
+https://gist.github.com/extropyCoder/9ddce05801ea7ec0f357ba2d9451b2fb
+
+This is the bytecode used during contract deployment ? (Unsure)
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+Explain what the following code is doing in the Yul ERC20 contract
+
+```
+function allowanceStorageOffset(account, spender) -> offset {
+    offset := accountToStorageOffset(account)
+    mstore(0, offset)
+    mstore(0x20, spender)
+    offset := keccak256(0, 0x40)
+}
+```
+
+The following function returns the offset at which the account allowance for spender from account is stored
+////////////////////////////////////////////////////////
