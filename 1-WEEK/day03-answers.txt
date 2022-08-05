@@ -3,10 +3,10 @@ What are the advantages and disadvantages of the 256 bit word length in the EVM
 
 Pros:
 -Facilitates Keccak256 hash
--Facilitates ECC
+-Facilitates ECC / large operations
 
 Cons:
--Limited word width
+-Too big for most computations
 ////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////
