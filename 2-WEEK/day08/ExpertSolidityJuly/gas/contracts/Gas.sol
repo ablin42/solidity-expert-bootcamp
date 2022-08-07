@@ -1,97 +1,95 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.0;
+pragma solidity 0.8.15;
 
 import "./Ownable.sol";
 
 contract GasContract is Ownable {
-    struct ImportantStruct {
-        //!
-        uint256 valueA; // max 3 digits
-        uint256 bigValue;
-        uint256 valueB; // max 3 digits
-    }
-
-    uint256 public immutable totalSupply;
-    uint256 internal paymentCounter = 0;
+    uint16 public immutable totalSupply;
+    uint16 internal paymentCounter = 0;
     address[5] public administrators;
-    mapping(address => bool) internal admins; //!
+    mapping(address => bool) internal admins;
 
-    mapping(address => uint256) internal balances;
-    mapping(address => uint256) public whitelist;
+    mapping(address => uint16) internal balances;
+    mapping(address => uint16) public whitelist;
     mapping(address => Payment[]) internal payments;
 
+    struct ImportantStruct {
+        uint8 valueA;
+        uint64 bigValue;
+        uint8 valueB;
+    }
     struct Payment {
         uint8 paymentType;
-        uint256 paymentID;
-        uint256 amount;
+        uint16 paymentID;
+        uint16 amount;
     }
 
-    event Transfer(address recipient, uint256 amount);
+    event Transfer(address recipient, uint16 amount);
 
-    modifier onlyAdminOrOwner() {
-        require(admins[msg.sender], "Not admin");
-        _;
-    }
-
-    constructor(address[] memory _admins, uint256 _totalSupply) {
+    constructor(address[] memory _admins, uint16 _totalSupply) {
         totalSupply = _totalSupply;
         balances[msg.sender] = _totalSupply;
 
-        for (uint256 ii = 0; ii < administrators.length; ii++) {
-            administrators[ii] = _admins[ii];
-            admins[_admins[ii]] = true;
+        for (uint8 i = 0; i < administrators.length; i++) {
+            administrators[i] = _admins[i];
+            admins[_admins[i]] = true;
         }
     }
 
-    function balanceOf(address _user) public view returns (uint256 balance_) {
-        balance_ = balances[_user];
-    }
-
-    function getTradingMode() public view returns (bool) {
-        return true;
-    }
-
-    function getPayments(address _user)
-        public
-        view
-        returns (Payment[] memory payments_)
-    {
-        payments_ = payments[_user];
+    function addToWhitelist(address _userAddrs, uint8 _tier) external {
+        whitelist[_userAddrs] = _tier;
     }
 
     function transfer(
         address _recipient,
-        uint256 _amount,
+        uint16 _amount,
         string calldata _name
-    ) public {
+    ) external {
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
         payments[msg.sender].push(Payment(3, ++paymentCounter, _amount));
         emit Transfer(_recipient, _amount);
     }
 
-    function updatePayment(
-        address _user,
-        uint256 _ID,
-        uint256 _amount,
-        uint8 _type
-    ) public onlyAdminOrOwner {
-        payments[_user][_ID - 1].paymentType = _type;
-        payments[_user][_ID - 1].amount = _amount;
-    }
-
-    function addToWhitelist(address _userAddrs, uint256 _tier) public {
-        whitelist[_userAddrs] = _tier;
+    function balanceOf(address _user) external view returns (uint16 balance_) {
+        balance_ = balances[_user];
     }
 
     function whiteTransfer(
         address _recipient,
-        uint256 _amount,
-        ImportantStruct memory _struct //!
-    ) public {
-        balances[msg.sender] -= _amount;
-        balances[_recipient] += _amount;
-        balances[msg.sender] += whitelist[msg.sender];
-        balances[_recipient] -= whitelist[msg.sender];
+        uint16 _amount,
+        ImportantStruct calldata _struct
+    ) external {
+        balances[msg.sender] =
+            balances[msg.sender] -
+            _amount +
+            whitelist[msg.sender];
+        balances[_recipient] =
+            balances[_recipient] +
+            _amount -
+            whitelist[msg.sender];
+    }
+
+    function updatePayment(
+        address _user,
+        uint8 _ID,
+        uint16 _amount,
+        uint8 _type
+    ) external {
+        require(admins[msg.sender], "Not admin");
+        payments[_user][_ID - 1].paymentType = _type;
+        payments[_user][_ID - 1].amount = _amount;
+    }
+
+    function getTradingMode() public pure returns (bool tradingMode) {
+        tradingMode = true;
+    }
+
+    function getPayments(address _user)
+        external
+        view
+        returns (Payment[] memory payments_)
+    {
+        payments_ = payments[_user];
     }
 }
