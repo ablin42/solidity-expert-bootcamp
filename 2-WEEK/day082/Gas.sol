@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.15;
 
-import "./Ownable.sol";
+error Unauthorized();
 
-contract GasContract is Ownable {
+contract GasContract {
     uint16 public immutable totalSupply;
-    uint16 internal paymentCounter = 0;
+    uint16 internal paymentCounter;
     address[5] public administrators;
     mapping(address => bool) internal admins;
 
@@ -15,8 +15,8 @@ contract GasContract is Ownable {
 
     struct ImportantStruct {
         uint8 valueA;
-        uint64 bigValue;
         uint8 valueB;
+        uint64 bigValue;
     }
     struct Payment {
         uint8 paymentType;
@@ -55,11 +55,7 @@ contract GasContract is Ownable {
         balance_ = balances[_user];
     }
 
-    function whiteTransfer(
-        address _recipient,
-        uint16 _amount,
-        ImportantStruct calldata _struct
-    ) external {
+    function whiteTransfer(address _recipient, uint16 _amount) external {
         balances[msg.sender] =
             balances[msg.sender] -
             _amount +
@@ -76,7 +72,7 @@ contract GasContract is Ownable {
         uint16 _amount,
         uint8 _type
     ) external {
-        require(admins[msg.sender], "Not admin");
+        if (!admins[msg.sender]) revert Unauthorized();
         payments[_user][_ID - 1].paymentType = _type;
         payments[_user][_ID - 1].amount = _amount;
     }

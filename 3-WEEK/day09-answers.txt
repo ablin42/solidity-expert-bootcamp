@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////
+Why are negative numbers more expensive to store than positive numbers ?
+
+Because we need to store the sign of the number in the first bit of the word
+////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+Test the following statements in Remix, which is cheaper and why ?
+Assume that the demoninator can never be zero.
+
+result = numerator / demoninator;
+
+assembly {
+result := div(numerator, demoninator)
+}
+
+The assembly is cheaper because we do not need to store numerator / denominator on the stack
+////////////////////////////////////////////////////////
+

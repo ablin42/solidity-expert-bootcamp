@@ -1,12 +1,12 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Gas1", function () {
+describe("Gas1", function() {
   let gasContract;
   let owner, addr1, addr2, addr3;
-  let importantStruct = [101, 100000000000000, 202];
+  let importantStruct = [101, 202, 100000000000000];
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     [owner, addr1, addr2, addr3] = await ethers.getSigners();
 
     const Gas1 = await ethers.getContractFactory("GasContract");
@@ -20,7 +20,7 @@ describe("Gas1", function () {
     gasContract = await Gas1.deploy(admins, 10000);
     await gasContract.deployed();
   });
-  it("Check that admins have been added", async function () {
+  it("Check that admins have been added", async function() {
     expect(await gasContract.administrators(0)).to.equal(
       "0x3243Ed9fdCDE2345890DDEAf6b083CA4cF0F68f2"
     );
@@ -35,11 +35,11 @@ describe("Gas1", function () {
     );
     expect(await gasContract.administrators(4)).to.equal(owner.address);
   });
-  it("Checks that the total supply is 10000", async function () {
+  it("Checks that the total supply is 10000", async function() {
     let supply = await gasContract.totalSupply();
     expect(supply).to.equal(10000);
   });
-  it("Checks a transfer", async function () {
+  it("Checks a transfer", async function() {
     // owner has total supply, transfer 100
 
     const transferTx = await gasContract.transfer(addr1.address, 100, "acc1");
@@ -48,7 +48,7 @@ describe("Gas1", function () {
     expect(acc1Balance).to.equal(100);
   });
 
-  it("Checks an update", async function () {
+  it("Checks an update", async function() {
     // create a transfer then update
 
     const transferTx1 = await gasContract.transfer(addr1.address, 300, "acc1");
@@ -75,25 +75,25 @@ describe("Gas1", function () {
     expect(Payments[0].paymentType).to.equal(3);
   });
 
-  it("Checks for events", async function () {
+  it("Checks for events", async function() {
     // create a transfer then update
     await expect(gasContract.transfer(addr1.address, 300, "acc1"))
       .to.emit(gasContract, "Transfer")
       .withArgs(addr1.address, 300);
   });
 
-  it("Checks for admin", async function () {
+  it("Checks for admin", async function() {
     await expect(
       gasContract.connect(addr1).updatePayment(owner.address, 1, 302, 3)
     ).to.be.reverted;
   });
-  it("Ensure trading mode is set", async function () {
+  it("Ensure trading mode is set", async function() {
     let mode = await gasContract.getTradingMode();
     expect(mode).to.equal(true);
   });
 
   //CAN BE adjusted to a level
-  it("Add users to whitelist and validate key users are added with correct tier", async function () {
+  it("Add users to whitelist and validate key users are added with correct tier", async function() {
     await addToWhitelist();
     let whitelistAddr1 = await gasContract.whitelist(addr1.address);
     expect(parseInt(whitelistAddr1)).to.equal(1);
@@ -102,7 +102,7 @@ describe("Gas1", function () {
     let whitelistAddr3 = await gasContract.whitelist(addr3.address);
     expect(parseInt(whitelistAddr3)).to.equal(3);
   });
-  it("Whitelist transfer works", async function () {
+  it("Whitelist transfer works", async function() {
     await addToWhitelist();
     const transferTx1 = await gasContract.transfer(addr1.address, 500, "acc1");
     await transferTx1.wait();
@@ -118,15 +118,15 @@ describe("Gas1", function () {
     let sendValue3 = 50;
     const whiteTransferTx1 = await gasContract
       .connect(addr1)
-      .whiteTransfer(recipient1.address, sendValue1, importantStruct);
+      .whiteTransfer(recipient1.address, sendValue1);
     await whiteTransferTx1.wait();
     const whiteTransferTx2 = await gasContract
       .connect(addr2)
-      .whiteTransfer(recipient2.address, sendValue2, importantStruct);
+      .whiteTransfer(recipient2.address, sendValue2);
     await whiteTransferTx2.wait();
     const whiteTransferTx3 = await gasContract
       .connect(addr3)
-      .whiteTransfer(recipient3.address, sendValue3, importantStruct);
+      .whiteTransfer(recipient3.address, sendValue3);
     await whiteTransferTx3.wait();
     let rec1Balance = await gasContract.balanceOf(recipient1.address);
     let rec2Balance = await gasContract.balanceOf(recipient2.address);
