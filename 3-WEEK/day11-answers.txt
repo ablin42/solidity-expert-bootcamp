@@ -1,0 +1,10 @@
+////////////////////////////////////////////////////////
+Look through the code for the MEV bot Sandwich: https://github.com/libevm/subway/blob/master/contracts/src/Sandwich.sol
+Do you understand what the assembly code is doing ?
+
+This assembly code is responsible for the buying & then selling of the tokens
+It loads the calldata and then calls the 1st transfer (1st slice)
+Then it checks if the transfer was successful or not
+After that it calls the 2nd transfer thus closing the sandwich (2nd slice)
+////////////////////////////////////////////////////////
+
