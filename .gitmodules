@@ -1,0 +1,6 @@
+[submodule "3-WEEK/day12/lets_forge/lib/forge-std"]
+	path = 3-WEEK/day12/lets_forge/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "3-WEEK/day12/lets_forge/lib/openzeppelin-contracts"]
+	path = 3-WEEK/day12/lets_forge/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
