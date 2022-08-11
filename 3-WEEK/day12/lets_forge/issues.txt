@@ -1,0 +1,23 @@
+# Others
+- No events
+- initialAmount badly initialized in constructor
+
+# Vars
+    - Unneeded 0 initialization
+    - Can add multiple times the same investors
+    - Mapping should be used instead of dynamic length array for investors
+
+# Add Investor
+    - Anyone can add investors but the subject says it should be by an administrator
+
+# Claim Tokens
+    - Ditch the for loop and use a mapping for investors[msg.sender]
+    - else statement in the loop is not necessary
+    - payout var is never updated
+    - if found we calculate the payout, but in both case we transfer the tokens
+
+# Calculate Payout 
+    - unneeded payout init to 0
+    - blockReward is shadowed by the fn
+    - doesn't check investor length, div by 0
+    - rewards seem to increase over time, not decrease

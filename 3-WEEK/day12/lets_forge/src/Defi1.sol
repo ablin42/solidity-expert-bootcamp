@@ -11,13 +11,21 @@ contract DeFi1 {
     Token public token;
 
     constructor(uint256 _initialAmount, uint256 _blockReward) {
-        initialAmount = initialAmount;
+        initialAmount = _initialAmount;
         token = new Token(_initialAmount);
         blockReward = _blockReward;
     }
 
     function addInvestor(address _investor) public {
         investors.push(_investor);
+    }
+
+    function getReward() public view returns (uint256) {
+        return blockReward;
+    }
+
+    function balanceOf(address _investor) public view returns (uint256) {
+        return token.balanceOf(_investor);
     }
 
     function claimTokens() public {
@@ -32,9 +40,10 @@ contract DeFi1 {
             }
         }
         if (found == true) {
-            calculatePayout();
+            payout = calculatePayout();
         }
 
+        // payout = calculatePayout();
         token.transfer(msg.sender, payout);
     }
 
