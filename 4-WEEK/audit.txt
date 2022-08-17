@@ -1,0 +1,8 @@
+# Function addWinner should have access control restriction or restricted to internal
+# Function payWinners should have access control restriction or restricted to internal
+# Function payout can be blocked by sending eth directly preventing the balance check to pass
+# SHould use a require instead of if check in payout
+# Function addPlayer should check for msg.value >= 1 instead of == 1
+# Instead of paying the users while iterating a loop, the user should claim (pull)
+# State does not reset after first payout occured
+# Current Prize is not being used
